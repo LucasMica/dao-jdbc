@@ -51,7 +51,7 @@ public class DB {
     }
 
     private static Properties loadProperties() {
-        try (FileInputStream fs = new FileInputStream("C:\\Users\\lucas\\Documents\\Arquivos códigos\\Atividades e desafios Curso Java\\Relembrando java\\jdbc1\\src\\db\\db.properties")) {
+        try (FileInputStream fs = new FileInputStream("db.properties")) {
             Properties props = new Properties();
             props.load(fs);
             return props;
