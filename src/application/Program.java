@@ -1,4 +1,4 @@
 package application;
 
-public class App {
+public class Program {
 }
