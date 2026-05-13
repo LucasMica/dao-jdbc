@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DepartmentDaoJDBC implements DepartmentDao {
@@ -61,9 +62,59 @@ public class DepartmentDaoJDBC implements DepartmentDao {
         }
     }
 
+    public Department findBySeller(Seller s) {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            ps = conn.prepareStatement(
+                    "Select department.* " +
+                            "from department inner join seller " +
+                            "on department.id = seller.DepartmentId " +
+                            "where seller.id = ?");
+
+            ps.setInt(1, s.getId());
+
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return instantiateDepartment(rs);
+            }
+
+            return null;
+
+        } catch (SQLException e) {
+            throw new DbException(e.getMessage());
+        } finally {
+            DB.closeStatement(ps);
+            DB.closeResultSet(rs);
+        }
+    }
+
     @Override
     public List<Department> findAll() {
-        return List.of();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        List<Department> l = new ArrayList<>();
+
+        try {
+            ps = conn.prepareStatement(
+                    "Select department.* from department order by department.Name asc");
+
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                l.add(instantiateDepartment(rs));
+            }
+
+            return l;
+
+        } catch (SQLException e) {
+            throw new DbException(e.getMessage());
+        } finally {
+            DB.closeStatement(ps);
+            DB.closeResultSet(rs);
+        }
     }
 
     private Department instantiateDepartment(ResultSet rs) throws SQLException {
