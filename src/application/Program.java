@@ -52,7 +52,17 @@ public class Program {
         System.out.println("==== Test 5: update seller ====");
         s = sellerDao.findById(9);
         s.setName("Rodrigão");
-        sellerDao.update(s);
+        //sellerDao.update(s);
+
+        System.out.println("==== Test 6: delete seller ====");
+
+        System.out.println("Declare an ID to delete from data base");
+        int id = sc.nextInt();
+        sc.nextLine();
+        sellerDao.deleteById(id);
+
+
+        sc.close();
     }
 
 

@@ -86,6 +86,10 @@ public class SellerDaoJDBC implements SellerDao {
 
             ps.executeUpdate();
 
+            Seller s = this.findById(obj.getId());
+
+            System.out.println(s + "\nwas updated");
+
         } catch (SQLException e) {
             throw new DbException(e.getMessage());
         } finally {
@@ -96,7 +100,26 @@ public class SellerDaoJDBC implements SellerDao {
 
     @Override
     public void deleteById(Integer id) {
+        PreparedStatement ps = null;
 
+        try {
+
+            ps = conn.prepareStatement(
+                    "DELETE FROM seller WHERE id = ?");
+
+            ps.setInt(1,id);
+
+            Seller s = this.findById(id);
+
+            ps.executeUpdate();
+
+            System.out.println( s + "\nwas deleted");
+        } catch (SQLException e) {
+            throw new DbException(e.getMessage());
+        }
+        finally {
+            DB.closeStatement(ps);
+        }
     }
 
     @Override
