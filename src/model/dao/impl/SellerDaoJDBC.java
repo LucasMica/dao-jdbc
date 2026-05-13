@@ -97,7 +97,6 @@ public class SellerDaoJDBC implements SellerDao {
         }
     }
 
-
     @Override
     public void deleteById(Integer id) {
         PreparedStatement ps = null;
@@ -153,7 +152,6 @@ public class SellerDaoJDBC implements SellerDao {
             DB.closeStatement(ps);
         }
     }
-
 
     @Override
     public List<Seller> findAll() {
