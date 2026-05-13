@@ -76,12 +76,12 @@ public class Seller implements Serializable {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Seller seller = (Seller) o;
-        return Objects.equals(getId(), seller.getId());
+        return Objects.equals(getName(), seller.getName()) && Objects.equals(getEmail(), seller.getEmail()) && Objects.equals(getBirthdate(), seller.getBirthdate()) && Objects.equals(getBaseSalary(), seller.getBaseSalary()) && Objects.equals(getDepartment(), seller.getDepartment());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(getId());
+        return Objects.hash(getName(), getEmail(), getBirthdate(), getBaseSalary(), getDepartment());
     }
 
     @Override
