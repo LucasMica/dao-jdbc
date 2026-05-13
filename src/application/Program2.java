@@ -32,5 +32,12 @@ public class Program2 {
         System.out.println("==== Test 3: find all departments ====");
         List<Department> l = depDao.findAll();
         l.forEach(System.out::println);
+
+        System.out.println("==== Test 4: Insert a department ====");
+        dep.setName("Clothes");
+        dep.setId(null);
+        depDao.insert(dep);
+
+        System.out.println("==== Test 5: Insert a department ====");
     }
 }
