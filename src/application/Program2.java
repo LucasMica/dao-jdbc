@@ -41,9 +41,9 @@ public class Program2 {
         System.out.println("==== Test 5: update a department ====");
         dep.setName("Tablets");
         dep.setId(7);
-        depDao.update(dep);
+        //depDao.update(dep);
 
-
-
+        System.out.println("==== Test 6: delete a department ====");
+        //depDao.deleteById(6);
     }
 }
