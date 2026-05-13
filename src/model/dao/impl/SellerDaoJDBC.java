@@ -36,7 +36,7 @@ public class SellerDaoJDBC implements SellerDao {
                 ps = conn.prepareStatement(
                         "insert into seller (Name, Email, BirthDate, BaseSalary, DepartmentId) " +
                                 "values " +
-                                "(?, ?, ?, ?, ?)");
+                                "(?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
 
                 ps.setString(1, obj.getName());
                 ps.setString(2, obj.getEmail());
@@ -44,22 +44,55 @@ public class SellerDaoJDBC implements SellerDao {
                 ps.setDouble(4, obj.getBaseSalary());
                 ps.setInt(5, obj.getDepartment().getId());
 
-                int u = ps.executeUpdate();
-                System.out.println("Update: " + u + " insert successufull");
+                int rows = ps.executeUpdate();
+                System.out.println("Update: " + rows + " insert successufull");
+
+                if (rows > 0) {
+                    ResultSet rs = ps.getGeneratedKeys();
+                    if (rs.next()) {
+                        int id = rs.getInt(1);
+                        obj.setId(id);
+                    }
+                    DB.closeResultSet(rs);
+                }
+
             } else {
                 System.out.println("Seller already exists in data bank!");
             }
 
         } catch (SQLException e) {
             throw new DbException(e.getMessage());
+        } finally {
+            DB.closeStatement(ps);
         }
-
     }
 
     @Override
     public void update(Seller obj) {
+        PreparedStatement ps = null;
 
+        try {
+            ps = conn.prepareStatement(
+                    "UPDATE seller SET " +
+                            "Name = ?, Email = ?, BirthDate = ?, BaseSalary = ?, DepartmentId = ? " +
+                            "WHERE id = ?", Statement.RETURN_GENERATED_KEYS);
+
+            ps.setString(1, obj.getName());
+            ps.setString(2, obj.getEmail());
+            ps.setDate(3, new java.sql.Date(obj.getBirthdate().getTime()));
+            ps.setDouble(4, obj.getBaseSalary());
+            ps.setInt(5, obj.getDepartment().getId());
+            ps.setInt(6, obj.getId());
+
+            ps.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new DbException(e.getMessage());
+        } finally {
+            DB.closeStatement(ps);
+        }
     }
+
 
     @Override
     public void deleteById(Integer id) {
@@ -97,7 +130,6 @@ public class SellerDaoJDBC implements SellerDao {
             DB.closeStatement(ps);
         }
     }
-
 
 
     @Override
@@ -184,14 +216,14 @@ public class SellerDaoJDBC implements SellerDao {
         }
     }
 
-    private Department instantiateDepartment(ResultSet rs) throws SQLException{
+    private Department instantiateDepartment(ResultSet rs) throws SQLException {
         Department dep = new Department();
         dep.setId(rs.getInt("DepartmentId"));
         dep.setName(rs.getString("DepName"));
         return dep;
     }
 
-    private Seller instantiateSeller(ResultSet rs, Department dep) throws SQLException{
+    private Seller instantiateSeller(ResultSet rs, Department dep) throws SQLException {
         Seller obj = new Seller();
 
         obj.setId(rs.getInt("Id"));

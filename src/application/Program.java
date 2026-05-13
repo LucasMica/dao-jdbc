@@ -13,7 +13,7 @@ import java.util.Objects;
 import java.util.Scanner;
 
 public class Program {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ParseException {
 
         Scanner sc = new Scanner(System.in);
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -37,18 +37,22 @@ public class Program {
         System.out.print("Do you want to do a new insert? (y/n) ");
         String c = sc.nextLine();
 
+
+        Seller s = new Seller(null,
+                "Lucas",
+                "lucas@gmail.com",
+                sdf.parse("30/08/2005"),
+                2000.00, dep);
+
         if (Objects.equals(c, "y")) {
-            try {
-                sellerDao.insert(new Seller(null,
-                        "Lucas",
-                        "lucas@gmail.com",
-                        sdf.parse("30/08/2005"),
-                        2000.00, dep));
-            } catch (ParseException e) {
-                throw new RuntimeException(e);
-            }
+            sellerDao.insert(s);
         }
 
+
+        System.out.println("==== Test 5: update seller ====");
+        s = sellerDao.findById(9);
+        s.setName("Rodrigão");
+        sellerDao.update(s);
     }
 
 
