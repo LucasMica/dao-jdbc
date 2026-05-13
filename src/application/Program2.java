@@ -36,8 +36,14 @@ public class Program2 {
         System.out.println("==== Test 4: Insert a department ====");
         dep.setName("Clothes");
         dep.setId(null);
-        depDao.insert(dep);
+        //depDao.insert(dep);
 
-        System.out.println("==== Test 5: Insert a department ====");
+        System.out.println("==== Test 5: update a department ====");
+        dep.setName("Tablets");
+        dep.setId(7);
+        depDao.update(dep);
+
+
+
     }
 }
